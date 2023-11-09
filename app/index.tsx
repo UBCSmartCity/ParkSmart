@@ -13,7 +13,7 @@ export default function Page() {
           <Text>Login</Text>
         </Link>
         <Link href="/garage" asChild>
-          <Text>Home</Text>
+          <Text>Garage</Text>
         </Link>
       </View>
     </View>
