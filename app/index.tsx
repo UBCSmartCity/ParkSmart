@@ -12,7 +12,7 @@ export default function Page() {
         <Link href="/login" asChild>
           <Text>Login</Text>
         </Link>
-        <Link href="/home_screen" asChild>
+        <Link href="/garage" asChild>
           <Text>Home</Text>
         </Link>
       </View>
