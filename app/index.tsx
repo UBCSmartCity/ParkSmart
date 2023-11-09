@@ -12,6 +12,9 @@ export default function Page() {
         <Link href="/login" asChild>
           <Text>Login</Text>
         </Link>
+        <Link href="/home_screen" asChild>
+          <Text>Home</Text>
+        </Link>
       </View>
     </View>
   );
