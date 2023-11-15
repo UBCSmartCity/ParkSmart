@@ -1,7 +1,24 @@
 import { Link } from "expo-router";
 import { View, TouchableHighlight, Text, StyleSheet } from "react-native";
+import Separator from "./components/separator";
+import { useState } from "react";
+
+function initializeSpaces(n = 5) {
+  const obj = [];
+  for (let i = 1; i <= n; i++) {
+    obj[i] = {
+      id: i,
+      type: "fullsize",
+      occupied: false,
+    };
+  }
+
+  return obj;
+}
 
 export default function garage() {
+  const [spaces, setSpaces] = useState(initializeSpaces());
+
   return (
     <View
       style={{
@@ -31,7 +48,19 @@ export default function garage() {
           </TouchableHighlight>
         </Link>
       </View>
-      <View style={{ flex: 0.85 }}></View>
+      <Separator />
+      <View
+        style={{
+          flex: 0.85,
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          alignItems: "flex-end",
+        }}
+      >
+        {spaces.map((space, idx) => (
+          <View key={space.id} style={styles.space}></View>
+        ))}
+      </View>
     </View>
   );
 }
@@ -46,5 +75,10 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     padding: 5,
     textAlign: "center",
+  },
+  space: {
+    backgroundColor: "#5350B7",
+    height: 60,
+    width: 130,
   },
 });
