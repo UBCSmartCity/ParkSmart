@@ -1,23 +1,35 @@
+import { useState } from "react";
 import { Link } from "expo-router";
 import { View, TouchableHighlight, Text, StyleSheet } from "react-native";
 import Separator from "./components/separator";
-import { useState } from "react";
+import GarageFloor from "./components/garageFloor";
+import { Dropdown } from "react-native-element-dropdown";
 
-function initializeSpaces(n = 5) {
-  const obj = [];
-  for (let i = 1; i <= n; i++) {
-    obj[i] = {
-      id: i,
-      type: "fullsize",
-      occupied: false,
-    };
+function initializeSpaces(floors = 2, n = 5) {
+  const spaces = [];
+  for (let i = 0; i < floors; i++) {
+    const space = [];
+    for (let j = 0; j < n; j++) {
+      space[j] = {
+        id: j,
+        type: i,
+        occupied: false,
+      };
+    }
+    spaces[i] = space;
   }
 
-  return obj;
+  return spaces;
 }
+
+const data = [
+  { label: "Floor 1", value: 0 },
+  { label: "Floor 2", value: 1 },
+];
 
 export default function garage() {
   const [spaces, setSpaces] = useState(initializeSpaces());
+  const [floor, setFloor] = useState(0);
 
   return (
     <View
@@ -35,7 +47,7 @@ export default function garage() {
           alignItems: "center",
         }}
       >
-        <View style={{ flex: 0.5 }}>
+        <View style={{ flex: 0.3 }}>
           <Text style={styles.textContainer}>Garage</Text>
         </View>
         <Link href="/" asChild>
@@ -47,20 +59,40 @@ export default function garage() {
             <Text style={styles.textContainer}>back</Text>
           </TouchableHighlight>
         </Link>
+        <View style={{ flex: 0.3 }}>
+          <Dropdown
+            style={styles.textContainer}
+            // placeholderStyle={styles.placeholderStyle}
+            // selectedTextStyle={styles.selectedTextStyle}
+            // inputSearchStyle={styles.inputSearchStyle}
+            // iconStyle={styles.iconStyle}
+            data={data}
+            // search
+            // maxHeight={300}
+            labelField="label"
+            valueField="value"
+            // placeholder={!isFocus ? 'Select item' : '...'}
+            searchPlaceholder="Search..."
+            value={floor.toString()}
+            // onFocus={() => setIsFocus(true)}
+            // onBlur={() => setIsFocus(false)}
+            onChange={(item) => {
+              setFloor(item.value);
+              // setIsFocus(false);
+            }}
+            // renderLeftIcon={() => (
+            //   <AntDesign
+            //     style={styles.icon}
+            //     color={isFocus ? 'blue' : 'black'}
+            //     name="Safety"
+            //     size={20}
+            //   />
+            // )}
+          />
+        </View>
       </View>
       <Separator />
-      <View
-        style={{
-          flex: 0.85,
-          flexDirection: "column",
-          justifyContent: "space-evenly",
-          alignItems: "flex-end",
-        }}
-      >
-        {spaces.map((space, idx) => (
-          <View key={space.id} style={styles.space}></View>
-        ))}
-      </View>
+      <GarageFloor spaces={spaces[floor]} />
     </View>
   );
 }
@@ -75,10 +107,5 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     padding: 5,
     textAlign: "center",
-  },
-  space: {
-    backgroundColor: "#5350B7",
-    height: 60,
-    width: 130,
   },
 });
