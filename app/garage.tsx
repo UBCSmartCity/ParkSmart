@@ -52,6 +52,7 @@ export default function garage() {
         </View>
         <View className="basis-1/4">
           <Dropdown
+            selectedTextStyle={{color: "#5350B7", fontWeight: "600", textAlign: "center"}}
             data={data}
             labelField="label"
             valueField="value"
