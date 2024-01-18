@@ -1,6 +1,8 @@
 import { View } from "react-native";
 
 export default function garageFloor({ spaces }) {
+  console.log(spaces);
+
   return (
     <View className="basis-5/6 flex flex-col justify-evenly items-end">
       {spaces &&
