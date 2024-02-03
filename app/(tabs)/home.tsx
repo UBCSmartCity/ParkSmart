@@ -1,6 +1,6 @@
 import { Link } from "expo-router";
 import { registerRootComponent } from "expo";
-import { Button, Pressable, StyleSheet, Text, View } from "react-native";
+import { Button, Pressable, StyleSheet, Text, View} from "react-native";
 
 export default function Home() {
   return (
@@ -12,6 +12,9 @@ export default function Home() {
       <View className="pt-10">
         <Link href="/login" asChild>
           <Text>Login</Text>
+        </Link>
+        <Link href="/map" asChild>
+          <Text>Map</Text>
         </Link>
       </View>
     </View>
