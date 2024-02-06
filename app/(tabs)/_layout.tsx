@@ -12,10 +12,10 @@ export default function TabLayout() {
   return (
     <Tabs>
       <Tabs.Screen
-        name="home"
+        name="map"
         options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          title: "Map",
+          tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
         }}
       />
       <Tabs.Screen
