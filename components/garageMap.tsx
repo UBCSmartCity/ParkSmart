@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView } from 'react-native';
 import { MiMapView } from '@mappedin/react-native-sdk';
 
-// See Trial API key Terms and Conditions
+// See Trial API Key Terms and Conditions
 // https://developer.mappedin.com/guides/api-keys
 const options = {
   clientId: '5eab30aa91b055001a68e996',
