@@ -1,10 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link } from "expo-router";
-import { View, TouchableHighlight, Text } from "react-native";
-import Separator from "../../components/separator";
-import GarageFloor from "../../components/garageFloor";
+import {  useState } from "react";
 import GarageMap from "../../components/garageMap";
-import { Dropdown } from "react-native-element-dropdown";
 
 function initializeSpaces(floors = 2, n = 5) {
   const spaces = [];
