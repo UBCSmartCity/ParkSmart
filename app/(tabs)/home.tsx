@@ -7,12 +7,9 @@ export default function Home() {
     <View className="flex-1 justify-center items-center">
       <View className=" ">
         <Text className=" font-extrabold text-5xl">ParkSmart</Text>
-        <Text className=" font-extrabold">by:UBCSmartCity</Text>
-      </View>
-      <View className="pt-10">
-        <Link href="/login" asChild>
-          <Text>Login</Text>
-        </Link>
+        <Text className=" font-extrabold">
+          by:UBC SmartCity Transportation Team
+        </Text>
       </View>
     </View>
   );
