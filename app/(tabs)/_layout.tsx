@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import ParkadeLayout from "./parkadeLayout";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -25,11 +26,18 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="garage"
         options={{
           title: "Garage",
           tabBarIcon: ({ color }) => <TabBarIcon name="info" color={color} />,
+        }}
+      /> */}
+      <Tabs.Screen
+        name="parkadeLayout"
+        options={{
+          title: "Garage",
+          tabBarIcon: ({ color }) => <TabBarIcon name="car" color={color} />,
         }}
       />
     </Tabs>
