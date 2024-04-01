@@ -5,35 +5,35 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 const parkingSpots = {
   '1':[
   // Left side
-  { id: 'A-01', occupied: true, type: 'car' },
-  { id: 'A-02', occupied: false, type: 'car' },
-  { id: 'A-03', occupied: false, type: 'car' },
-  { id: 'A-04', occupied: true, type: 'car' },
-  { id: 'A-05', occupied: true, type: 'car' },
-  { id: 'A-6', occupied: false, type: 'car' },
+  { id: 'A-01', occupied: false, isDisable: true, type: 'car' },
+  { id: 'A-02', occupied: false, isDisable: true, type: 'car' },
+  { id: 'A-03', occupied: true, isDisable: false, type: 'car' },
+  { id: 'A-04', occupied: true, isDisable: false, type: 'car' },
+  { id: 'A-05', occupied: true, isDisable: false, type: 'car' },
+  { id: 'A-6', occupied: false, isDisable: false, type: 'car' },
 
   // Right side, after left side spots
-  { id: 'A-07', occupied: true, type: 'car' }, 
-  { id: 'A-08', occupied: false, type: 'car' },
-  { id: 'A-09', occupied: true, type: 'car' },
-  { id: 'A-10', occupied: true, type: 'car' },
-  { id: 'A-11', occupied: false, type: 'car' },
-  { id: 'A-12', occupied: true, type: 'car' },
+  { id: 'A-07', occupied: false, isDisable: true, type: 'car' }, 
+  { id: 'A-08', occupied: false, isDisable: true, type: 'car' },
+  { id: 'A-09', occupied: true, isDisable: false, type: 'car' },
+  { id: 'A-10', occupied: true, isDisable: false, type: 'car' },
+  { id: 'A-11', occupied: false, isDisable: false, type: 'car' },
+  { id: 'A-12', occupied: true, isDisable: false, type: 'car' },
   ],
   '2':[
     // Left side
-    { id: 'A-01', occupied: true, type: 'car' },
-    { id: 'A-02', occupied: false, type: 'car' },
-    { id: 'A-03', occupied: false, type: 'car' },
-    { id: 'A-04', occupied: true, type: 'car' },
-    { id: 'A-05', occupied: true, type: 'car' },
+    { id: 'A-01', occupied: false, isDisable: true, type: 'car' },
+    { id: 'A-02', occupied: false, isDisable: true, type: 'car' },
+    { id: 'A-03', occupied: false, isDisable: false, type: 'car' },
+    { id: 'A-04', occupied: true, isDisable: false, type: 'car' },
+    { id: 'A-05', occupied: true, isDisable: false, type: 'car' },
   
     // Right side, after left side spots
-    { id: 'A-07', occupied: true, type: 'car' }, 
-    { id: 'A-08', occupied: false, type: 'car' },
-    { id: 'A-09', occupied: true, type: 'car' },
-    { id: 'A-10', occupied: true, type: 'car' },
-    { id: 'A-11', occupied: false, type: 'car' },
+    { id: 'A-07', occupied: false, isDisable: true, type: 'car' }, 
+    { id: 'A-08', occupied: false, isDisable: true, type: 'car' },
+    { id: 'A-09', occupied: true, isDisable: false, type: 'car' },
+    { id: 'A-10', occupied: true, isDisable: false, type: 'car' },
+    { id: 'A-11', occupied: false, isDisable: false, type: 'car' },
     ],
 };
 
@@ -54,6 +54,13 @@ const ParkingGrid = ({ floor }) => {
           <Image
             source={require('D:/UBC/UBC Smart City/ParkSmart/assets/icons/sport-car.png')}
             style={styles.occupiedSpot}
+            resizeMode='contain'
+          />
+        ) : spot.isDisable ? (
+          // Show a different icon or style if the spot is disabled
+          <Image
+            source={require('D:/UBC/UBC Smart City/ParkSmart/assets/icons/disability.png')}
+            style={styles.disabledSpot}
             resizeMode='contain'
           />
         ) : (
@@ -109,6 +116,10 @@ const styles = StyleSheet.create({
     height: '80%',
   },
   spotNumber: {
+  },
+  disabledSpot: {
+    width: '60%',
+    height: '60%',
   },
 });
 
