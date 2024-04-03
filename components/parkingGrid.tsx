@@ -52,14 +52,14 @@ const ParkingGrid = ({ floor }) => {
       <View style={styles.parkingSpot} key={`spot-${side}-${index}`}>
         {spot.occupied ? (
           <Image
-            source={require('D:/UBC/UBC Smart City/ParkSmart/assets/icons/sport-car.png')}
+            source={require('assets\icons\sport-car.png')}
             style={styles.occupiedSpot}
             resizeMode='contain'
           />
         ) : spot.isDisable ? (
           // Show a different icon or style if the spot is disabled
           <Image
-            source={require('D:/UBC/UBC Smart City/ParkSmart/assets/icons/disability.png')}
+            source={require('assets\icons\disability.png')}
             style={styles.disabledSpot}
             resizeMode='contain'
           />
