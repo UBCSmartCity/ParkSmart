@@ -71,7 +71,7 @@ export default function map() {
       initialRegion={initialRegion}
       showsUserLocation={true}
       showsMyLocationButton={true}
-      followsUserLocation={true}
+      followsUserLocation={false}
       showsCompass={true}
       scrollEnabled={true}
       zoomEnabled={true}
