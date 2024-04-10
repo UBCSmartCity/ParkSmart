@@ -25,13 +25,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="garage"
-        options={{
-          title: "Garage",
-          tabBarIcon: ({ color }) => <TabBarIcon name="info" color={color} />,
-        }}
-      />
     </Tabs>
   );
 }

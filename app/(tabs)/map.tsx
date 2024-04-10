@@ -2,7 +2,7 @@ import { Link, Redirect } from "expo-router";
 import { registerRootComponent } from "expo";
 import { useEffect, useState } from "react";
 import { Button, Text, View, StyleSheet } from "react-native";
-import MapView from "react-native-maps";
+import MapView, { Callout } from "react-native-maps";
 import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
@@ -18,7 +18,6 @@ export default function map() {
         longitudeDelta: 0.005,
       },
       title: "Thunderbird Parkade",
-      description: "This is a description",
     },
     {
       position: {
@@ -28,7 +27,6 @@ export default function map() {
         longitudeDelta: 0.005,
       },
       title: "North Parkade",
-      description: "This is a description",
     },
     {
       position: {
@@ -38,7 +36,6 @@ export default function map() {
         longitudeDelta: 0.005,
       },
       title: "West Parkade",
-      description: "This is a description",
     },
   ]);
 
@@ -83,12 +80,16 @@ export default function map() {
     >
       {position.map((pos, idx) => {
         return (
-          <Marker
-            key={idx}
-            title={pos.title}
-            description={pos.description}
-            coordinate={pos.position}
-          />
+          <Marker key={idx} coordinate={pos.position}>
+            <Callout>
+              <View>
+                <Text style={styles.calloutTitle}>{pos.title}</Text>
+                <Link href="/garage" asChild>
+                  <Button title="View Availablities" />
+                </Link>
+              </View>
+            </Callout>
+          </Marker>
         );
       })}
     </MapView>
@@ -102,6 +103,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  calloutTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
   },
 });
 
