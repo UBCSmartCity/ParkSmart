@@ -5,5 +5,5 @@ export default function App() {
 
   if (!rootNavigationState?.key) return null;
 
-  return <Redirect href={"/home"} />;
+  return <Redirect href={"/map"} />;
 }
