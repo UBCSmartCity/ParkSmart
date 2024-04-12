@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, TextInput, Text, Button } from "react-native";
+import { View, TextInput, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { auth } from "../../firebase/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
@@ -7,6 +7,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  // Register method
   const handleRegister = () => {
     createUserWithEmailAndPassword(auth, username, password)
       .then((userCredential) => {
@@ -18,6 +19,7 @@ export default function Login() {
       });
   };
 
+  // Log in method
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, username, password)
       .then((userCredential) => {
@@ -41,31 +43,74 @@ export default function Login() {
   };
 
   return (
-    <View className="flex-1 justify-center items-center">
+    <View style={styles.container}>
       <TextInput
-        className="text-black bg-gray-200 border border-gray-300 p-2 mt-2 mb-2 rounded w-4/5"
         onChangeText={setUsername}
         value={username}
-        placeholder="Username"
+        placeholder="User Email"
+        placeholderTextColor="#666666"
+        style={styles.textInput}
       />
       <TextInput
-        className="text-black bg-gray-200 border border-gray-300 p-2 mt-2 mb-2 rounded w-4/5"
         onChangeText={setPassword}
         value={password}
         placeholder="Password"
+        placeholderTextColor="#666666"
+        secureTextEntry
+        style={styles.textInput}
       />
 
-      <View style={{ width: '80%', marginBottom: 10 }}>
-        <Button title="Register" onPress={handleRegister} color="#007AFF" />
-      </View>
-      <View style={{ width: '80%', marginBottom: 10 }}>
-        <Button title="Login" onPress={handleLogin} color="#007AFF" />
-      </View>
+      {/* Register Button */}
+      <TouchableOpacity style={styles.commandButton} onPress={handleRegister}>
+        <Text style={styles.panelButtonTitle}>Register</Text>
+      </TouchableOpacity>
+      {/* Login Button */}
+      <TouchableOpacity style={styles.commandButton} onPress={handleLogin}>
+        <Text style={styles.panelButtonTitle}>Login</Text>
+      </TouchableOpacity>
       {/* Sign Out Button */}
-      <View style={{ width: '80%' }}>
-        <Button title="Sign Out" onPress={handleSignOut} color="#007AFF" />
-      </View>
-
+      <TouchableOpacity style={styles.commandButton} onPress={handleSignOut}>
+        <Text style={styles.panelButtonTitle}>Sign Out</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+
+  textInput: {
+    height: 40,
+    width: '100%',
+    marginVertical: 10,
+    paddingLeft: 15,
+    color: '#05375a', 
+    borderWidth: 1,
+    borderColor: '#000', 
+    borderRadius: 10,
+    backgroundColor: '#fff', 
+    elevation: 3, 
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.25, 
+  },
+
+  commandButton: {
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: '#FF6347',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  panelButtonTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+});
