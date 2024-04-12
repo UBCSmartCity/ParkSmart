@@ -1,23 +1,11 @@
 import { useState } from "react";
 import { View, TextInput, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { auth } from "../../firebase/firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  // Register method
-  const handleRegister = () => {
-    createUserWithEmailAndPassword(auth, username, password)
-      .then((userCredential) => {
-        console.log("User registered successfully");
-        console.log(userCredential);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   // Log in method
   const handleLogin = () => {
@@ -44,6 +32,7 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
       <TextInput
         onChangeText={setUsername}
         value={username}
@@ -60,10 +49,6 @@ export default function Login() {
         style={styles.textInput}
       />
 
-      {/* Register Button */}
-      <TouchableOpacity style={styles.commandButton} onPress={handleRegister}>
-        <Text style={styles.panelButtonTitle}>Register</Text>
-      </TouchableOpacity>
       {/* Login Button */}
       <TouchableOpacity style={styles.commandButton} onPress={handleLogin}>
         <Text style={styles.panelButtonTitle}>Login</Text>
@@ -112,5 +97,10 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     color: 'white',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 });
