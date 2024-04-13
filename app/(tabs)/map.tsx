@@ -84,7 +84,7 @@ export default function map() {
             <Callout>
               <View>
                 <Text style={styles.calloutTitle}>{pos.title}</Text>
-                <Link href="/garage" asChild>
+                <Link href="/parkadeLayout" asChild>
                   <Button title="View Availablities" />
                 </Link>
               </View>
