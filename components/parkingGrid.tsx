@@ -110,14 +110,14 @@ const ParkingGrid = ({ floor }) => {
         {spot.isDisable && spot.occupied === 1 ? (
           // If the spot is disabled and occupied, show a specific image
           <Image
-            source={require("D:/UBC/UBC Smart City/ParkSmart/assets/icons/disability_red.png")}
+            source={disabilityRedIcon}
             style={styles.occupiedDisabledSpot}
             resizeMode="contain"
           />
         ) : spot.isDisable ? (
           // If the spot is only disabled, show the disability image
           <Image
-            source={require("D:/UBC/UBC Smart City/ParkSmart/assets/icons/disability.png")}
+            source={disabilityIcon}
             style={styles.disabledSpot}
             resizeMode="contain"
           />
