@@ -1,43 +1,18 @@
 import { Link, Redirect } from "expo-router";
 import { registerRootComponent } from "expo";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Button, Text, View, StyleSheet } from "react-native";
 import MapView, { Callout } from "react-native-maps";
 import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
+import { AppContext } from "../../providers/AppContext";
+
 export default function map() {
+  const { states } = useContext(AppContext);
   const [initialRegion, setInitialRegion] = useState();
   const [currentLocation, setCurrentLocation] = useState();
-  const [position, setPosition] = useState([
-    {
-      position: {
-        latitude: 49.26177,
-        longitude: -123.24318,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      },
-      title: "Thunderbird Parkade",
-    },
-    {
-      position: {
-        latitude: 49.26913588171714,
-        longitude: -123.25094801537071,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      },
-      title: "North Parkade",
-    },
-    {
-      position: {
-        latitude: 49.26264468076022,
-        longitude: -123.25547069764835,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      },
-      title: "West Parkade",
-    },
-  ]);
+
 
   useEffect(() => {
     const getLocation = async () => {
@@ -78,7 +53,7 @@ export default function map() {
       pitchEnabled={true}
       rotateEnabled={true}
     >
-      {position.map((pos, idx) => {
+      {states.parkades.map((pos, idx) => {
         return (
           <Marker key={idx} coordinate={pos.position}>
             <Callout>
