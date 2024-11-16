@@ -13,6 +13,7 @@ export default function map() {
   const [initialRegion, setInitialRegion] = useState();
   const [currentLocation, setCurrentLocation] = useState();
 
+  console.log(states.parkades);
 
   useEffect(() => {
     const getLocation = async () => {
@@ -59,8 +60,8 @@ export default function map() {
             <Callout>
               <View>
                 <Text style={styles.calloutTitle}>{pos.title}</Text>
-                <Link href="/garage" asChild>
-                  <Button title="View Availablities" />
+                <Link href={{ pathname: "/garage", params: { parkade: JSON.stringify(pos) } }} asChild>
+                  <Button title="View Availabilities" />
                 </Link>
               </View>
             </Callout>

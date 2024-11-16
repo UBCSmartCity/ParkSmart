@@ -1,27 +1,27 @@
 // ParkadeLayout.tsx
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Dropdown from "../components/dropdown";
 import ParkingGrid from "../components/parkingGrid";
 
+import { useLocalSearchParams } from "expo-router";
+import { AppContext } from "../providers/AppContext";
+import { Parkade } from "../types/Garage.type";
+
 const ParkadeLayout = () => {
+  const { parkade: parkadeString } = useLocalSearchParams() as { parkade: string };
+  const parkade: Parkade = JSON.parse(parkadeString);
+
   const [selectedFloor, setSelectedFloor] = useState("1"); // Default to floor 1
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.topLeftBox}>
-          <Text
-            style={[styles.topLeftText, styles.flexHalf, styles.enhancedHeight]}
-          >
-            UBC Thunderbird Parkade
-          </Text>
+          <Text style={[styles.topLeftText, styles.flexHalf, styles.enhancedHeight]}>{parkade.title}</Text>
         </View>
         <View style={[styles.flexHalf, styles.enhancedHeight]}>
-          <Dropdown
-            selectedFloor={selectedFloor}
-            onFloorChange={setSelectedFloor}
-          />
+          <Dropdown selectedFloor={selectedFloor} onFloorChange={setSelectedFloor} />
         </View>
       </View>
       <View style={[styles.entryExit, styles.flexShrink]}>
