@@ -10,8 +10,13 @@ import { AppContext } from "../../providers/AppContext";
 
 export default function map() {
   const { states } = useContext(AppContext);
-  const [initialRegion, setInitialRegion] = useState();
-  const [currentLocation, setCurrentLocation] = useState();
+  const [initialRegion, setInitialRegion] = useState<{
+    latitude: number;
+    longitude: number;
+    latitudeDelta: number;
+    longitudeDelta: number;
+  } | undefined>(undefined);
+  const [currentLocation, setCurrentLocation] = useState<Location.LocationObjectCoords | undefined>(undefined);
 
   console.log(states.parkades);
 
