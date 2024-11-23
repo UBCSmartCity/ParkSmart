@@ -1,12 +1,13 @@
-import { Link, Redirect } from "expo-router";
+import { useRouter } from "expo-router";
 import { registerRootComponent } from "expo";
 import { useEffect, useState } from "react";
-import { Button, Text, View, StyleSheet } from "react-native";
+import { Button, Text, StyleSheet, TouchableOpacity } from "react-native";
 import MapView, { Callout } from "react-native-maps";
 import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
 export default function map() {
+  const router = useRouter();
   const [initialRegion, setInitialRegion] = useState();
   const [currentLocation, setCurrentLocation] = useState();
   const [position, setPosition] = useState([
@@ -81,13 +82,11 @@ export default function map() {
       {position.map((pos, idx) => {
         return (
           <Marker key={idx} coordinate={pos.position}>
-            <Callout>
-              <View>
-                <Text style={styles.calloutTitle}>{pos.title}</Text>
-                <Link href="/garage" asChild>
-                  <Button title="View Availablities" />
-                </Link>
-              </View>
+            <Callout onPress={() => router.push("/garage")}>
+              <Text style={styles.calloutTitle}>{pos.title}</Text>
+              <TouchableOpacity>
+                <Button title="View Availablities" />
+              </TouchableOpacity>
             </Callout>
           </Marker>
         );
