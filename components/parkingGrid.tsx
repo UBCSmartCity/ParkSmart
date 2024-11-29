@@ -147,7 +147,12 @@ const ParkingGrid = ({ floor }) => {
         {renderParkingSpots(leftSideSpots, "left")}
       </View>
       <View style={styles.middleSpace}>
-        <Icon name="arrow-downward" size={30} color="#000" />
+        <Icon name="arrow-downward" size={30} color="#5350B7"/>
+        <Icon name="arrow-downward" size={30} color="#5350B7"/>
+        <Icon name="arrow-downward" size={30} color="#5350B7"/>
+        <Icon name="arrow-downward" size={30} color="#5350B7"/>
+        <Icon name="arrow-downward" size={30} color="#5350B7"/>
+        <Icon name="arrow-downward" size={30} color="#5350B7"/>
       </View>
       <View style={styles.column}>
         {renderParkingSpots(rightSideSpots, "right")}
@@ -171,6 +176,11 @@ const styles = StyleSheet.create({
   middleSpace: {
     width: "10%",
     paddingTop: "30%",
+    display: "flex",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    backgroundColor: "red",
+    
   },
   parkingSpot: {
     width: "50%",
@@ -191,6 +201,7 @@ const styles = StyleSheet.create({
   spotNumber: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#D1CFCF",
   },
   disabledSpot: {
     width: "60%",
