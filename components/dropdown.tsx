@@ -4,11 +4,11 @@ import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 const data = [
-  { label: "Floor 1", value: "1" },
-  { label: "Floor 2", value: "2" },
-  { label: "Floor 3", value: "3" },
-  { label: "Floor 4", value: "4" },
-  { label: "Floor 5", value: "5" },
+  { label: "1st Floor", value: "1" },
+  { label: "2nd Floor", value: "2" },
+  { label: "3rd Floor", value: "3" },
+  { label: "4th Floor", value: "4" },
+  { label: "5th Floor", value: "5" },
 ];
 
 const DropdownComponent = ({ selectedFloor, onFloorChange }) => {
@@ -40,7 +40,7 @@ const DropdownComponent = ({ selectedFloor, onFloorChange }) => {
         renderLeftIcon={() => (
           <AntDesign
             style={styles.icon}
-            color={isFocus ? "blue" : "black"}
+            color={isFocus ? "#5350B7" : "black"}
             name="Safety"
             size={20}
           />
@@ -54,15 +54,14 @@ export default DropdownComponent;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
     padding: 8,
     flex: 1,
     zIndex: 1000,
   },
   dropdown: {
     height: 50,
-    borderColor: "gray",
-    borderWidth: 0.5,
+    borderColor: "light-grey",
+    borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 8,
     flex: 1,
@@ -84,6 +83,8 @@ const styles = StyleSheet.create({
   },
   selectedTextStyle: {
     fontSize: 16,
+    color: "#5350B7",
+    fontWeight: "bold",
   },
   iconStyle: {
     width: 20,

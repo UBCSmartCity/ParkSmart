@@ -147,12 +147,12 @@ const ParkingGrid = ({ floor }) => {
         {renderParkingSpots(leftSideSpots, "left")}
       </View>
       <View style={styles.middleSpace}>
-        <Icon name="arrow-downward" size={30} color="#5350B7"/>
-        <Icon name="arrow-downward" size={30} color="#5350B7"/>
-        <Icon name="arrow-downward" size={30} color="#5350B7"/>
-        <Icon name="arrow-downward" size={30} color="#5350B7"/>
-        <Icon name="arrow-downward" size={30} color="#5350B7"/>
-        <Icon name="arrow-downward" size={30} color="#5350B7"/>
+        <Icon name="arrow-downward" size={30} color="#5350B7" paddingBottom={12}/>
+        <Icon name="arrow-downward" size={30} color="#5350B7" paddingTop={12} paddingBottom={12}/>
+        <Icon name="arrow-downward" size={30} color="#5350B7" paddingTop={12} paddingBottom={12}/>
+        <Icon name="arrow-downward" size={30} color="#5350B7" paddingTop={12} paddingBottom={12}/>
+        <Icon name="arrow-downward" size={30} color="#5350B7" paddingTop={12} paddingBottom={12}/>      
+        <Icon name="arrow-downward" size={30} color="#5350B7" paddingTop={12}/>
       </View>
       <View style={styles.column}>
         {renderParkingSpots(rightSideSpots, "right")}
@@ -177,10 +177,8 @@ const styles = StyleSheet.create({
     width: "10%",
     paddingTop: "30%",
     display: "flex",
-    justifyContent: "space-evenly",
+    justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "red",
-    
   },
   parkingSpot: {
     width: "50%",

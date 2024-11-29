@@ -25,17 +25,17 @@ const ParkadeLayout = () => {
         </View>
       </View>
       <View style={[styles.entryExit, styles.flexShrink]}>
-        <View style={styles.entryExitLine} />
-        <Text style={styles.entryExitText}>ENTRY</Text>
-        <View style={styles.entryExitLine} />
+        <View style={styles.entryExitLineLeft} />
+        <Text style={styles.entryText}>ENTRY</Text>
+        <View style={styles.entryExitLineRight} />
       </View>
       <View>
         <ParkingGrid floor={selectedFloor} />
       </View>
       <View style={[styles.footer, styles.flexShrink]}>
-        <View style={styles.entryExitLine} />
-        <Text style={styles.entryExitText}>EXIT</Text>
-        <View style={styles.entryExitLine} />
+        <View style={styles.entryExitLineLeft} />
+        <Text style={styles.exitText}>EXIT</Text>
+        <View style={styles.entryExitLineRight} />
       </View>
     </View>
   );
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     justifyContent: "space-between",
     padding: 5,
+    gap: 50
   },
   header: {
     flexDirection: "row",
@@ -69,14 +70,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 0,
   },
-  entryExitText: {
+  entryText: {
     fontWeight: "bold",
     marginHorizontal: 10,
+    color: "#5CD268"
   },
-  entryExitLine: {
+  exitText: {
+    fontWeight: "bold",
+    marginHorizontal: 10,
+    color: "#D5D5D5"
+  },
+  entryExitLineLeft: {
     flex: 1,
-    height: 1,
-    backgroundColor: "gray",
+    height: 12,
+    backgroundColor: "#E0E0E0",
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5
+  },
+  entryExitLineRight: {
+    flex: 1,
+    height: 12,
+    backgroundColor: "#E0E0E0",
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5
   },
   topLeftBox: {
     backgroundColor: "#f0f0f0",
@@ -88,7 +104,7 @@ const styles = StyleSheet.create({
   },
   topLeftText: {
     fontSize: 14,
-    color: "#333",
+    color: "5350B7",
     fontWeight: "bold",
   },
   flexHalf: {
