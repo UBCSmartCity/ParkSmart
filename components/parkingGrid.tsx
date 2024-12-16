@@ -39,6 +39,54 @@ const initialParkingSpots = {
     { id: "A-11", occupied: 0, isDisable: false, type: "car" },
     { id: "A-12", occupied: 0, isDisable: false, type: "car" },
   ],
+  "3": [
+    // Left side
+    { id: "A-01", occupied: 0, isDisable: true, type: "car" },
+    { id: "A-02", occupied: 0, isDisable: true, type: "car" },
+    { id: "A-03", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-04", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-05", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-06", occupied: 0, isDisable: false, type: "car" },
+    // Right side, after left side spots
+    { id: "A-07", occupied: 0, isDisable: true, type: "car" },
+    { id: "A-08", occupied: 0, isDisable: true, type: "car" },
+    { id: "A-09", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-10", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-11", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-12", occupied: 0, isDisable: false, type: "car" },
+  ],
+  "4": [
+    // Left side
+    { id: "A-01", occupied: 0, isDisable: true, type: "car" },
+    { id: "A-02", occupied: 0, isDisable: true, type: "car" },
+    { id: "A-03", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-04", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-05", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-06", occupied: 0, isDisable: false, type: "car" },
+    // Right side, after left side spots
+    { id: "A-07", occupied: 0, isDisable: true, type: "car" },
+    { id: "A-08", occupied: 0, isDisable: true, type: "car" },
+    { id: "A-09", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-10", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-11", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-12", occupied: 0, isDisable: false, type: "car" },
+  ],
+  "5": [
+    // Left side
+    { id: "A-01", occupied: 0, isDisable: true, type: "car" },
+    { id: "A-02", occupied: 0, isDisable: true, type: "car" },
+    { id: "A-03", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-04", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-05", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-06", occupied: 0, isDisable: false, type: "car" },
+    // Right side, after left side spots
+    { id: "A-07", occupied: 0, isDisable: true, type: "car" },
+    { id: "A-08", occupied: 0, isDisable: true, type: "car" },
+    { id: "A-09", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-10", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-11", occupied: 0, isDisable: false, type: "car" },
+    { id: "A-13", occupied: 0, isDisable: false, type: "car" },
+  ],
 };
 
 // Mapping of topic numbers to parking spot IDs for each floor
@@ -51,7 +99,7 @@ const ParkingGrid = ({ floor }) => {
   const [spots, setSpots] = useState(initialParkingSpots[floor]);
 
   useEffect(() => {
-    setSpots(initialParkingSpots[floor]);
+    setSpots(initialParkingSpots[floor]|| []);
     const client = new Paho.Client(
       "a379239388c5400b8bd9d9d9f56f51ca.s2.eu.hivemq.cloud",
       8884,
@@ -103,6 +151,9 @@ const ParkingGrid = ({ floor }) => {
       }
     };
   }, [floor]);
+  if (!spots || spots.length === 0) {
+    return <Text>No parking spots available for this floor.</Text>;
+  }
 
   const renderParkingSpots = (spots, side) => {
     return spots.map((spot, index) => (
