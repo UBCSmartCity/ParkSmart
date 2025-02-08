@@ -7,12 +7,19 @@ import { Link } from "expo-router";
 export default function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
     // Register method
     const handleRegister = () => {
+      if (!email || !password) {
+        setError("Both email and password are required.");
+        return;
+      }
+
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           console.log("User registered successfully", userCredential);
+          setError("");
         })
         .catch((err) => {
           console.error(err);

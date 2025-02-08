@@ -2,20 +2,37 @@ import { useState } from "react";
 import { View, TextInput, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { auth } from "../../firebase/firebase";
 import {signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { useAuth } from "../authContext";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const [error, setError] = useState("");
 
   // Log in method
   const handleLogin = () => {
+    // add proper error handling
+    if (!username || !password){
+      setError("Both email and password are required");
+      return;
+    }
+
     signInWithEmailAndPassword(auth, username, password)
       .then((userCredential) => {
         console.log("User signed in successfully");
         console.log(userCredential);
+        // userCredential object contains user id, email, displayName, other Firebase user properties 
+        const user = userCredential.user;
+        // clear error on successful login
+        setError("");
+        
+        // Just in case, may not need auth token 
+        user.getIdToken().then((token) => {
+        console.log("Token:", token)});
       })
       .catch((err) => {
-        console.log(err);
+        console.log("Error signing in:", err);
       });
   };
 
@@ -26,7 +43,7 @@ export default function Login() {
         console.log("User signed out successfully");
       })
       .catch((err) => {
-        console.log(err);
+        console.log("Error signing out:", err);
       });
   };
 
