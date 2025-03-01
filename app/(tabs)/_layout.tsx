@@ -12,6 +12,8 @@ export default function TabLayout() {
   return (
     <Tabs>
       <Tabs.Screen
+        // condition to check auth user
+        // if user is signed in then grant access.
         name="map"
         options={{
           title: "Map",
