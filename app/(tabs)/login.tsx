@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, TextInput, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { auth } from "../../firebase/firebase";
 import {signInWithEmailAndPassword, signOut } from "firebase/auth";
@@ -7,8 +7,10 @@ import { useAuth } from "../authContext";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuth();
+  //const { login } = useAuth();
   const [error, setError] = useState("");
+
+  useEffect(()=>{console.log(auth)}, [])
 
   // Log in method
   const handleLogin = () => {

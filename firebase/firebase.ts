@@ -9,13 +9,13 @@ import { getAuth } from "firebase/auth"
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: `${process.env.FIREBASE_API_KEY}`,
-  authDomain: "ubc-smartcity-smartparking.firebaseapp.com",
-  databaseURL: "https://ubc-smartcity-smartparking-default-rtdb.firebaseio.com",
-  projectId: "ubc-smartcity-smartparking",
-  storageBucket: "ubc-smartcity-smartparking.appspot.com",
-  messagingSenderId: "107690191982",
-  appId: "1:107690191982:web:34486f29f1149e8a770a7f",
-  measurementId: "G-R2VWKEC0MZ"
+  authDomain: `${process.env.AUTH_DOMAIN}`,
+  databaseURL: `${process.env.DATABASE_URL}`,
+  projectId: `${process.env.PROJECT_ID}`,
+  storageBucket: `${process.env.STORAGE_BUCKET}`,
+  messagingSenderId: `${process.env.MESSAGING_SENDER_ID}`,
+  appId: `${process.env.APP_ID}`,
+  measurementId: `${process.env.MEASUREMENT_ID}`
 };
 
 // Initialize Firebase
