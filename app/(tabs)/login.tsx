@@ -2,50 +2,38 @@ import { useState, useEffect } from "react";
 import { View, TextInput, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { auth } from "../../firebase/firebase";
 import {signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { useAuth } from "../authContext";
+import { useRouter } from "expo-router";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  //const { login } = useAuth();
-  const [error, setError] = useState("");
-
-  useEffect(()=>{console.log(auth)}, [])
+  const router = useRouter();
 
   // Log in method
   const handleLogin = () => {
-    // add proper error handling
-    if (!username || !password){
-      setError("Both email and password are required");
-      return;
-    }
-
     signInWithEmailAndPassword(auth, username, password)
       .then((userCredential) => {
         console.log("User signed in successfully");
         console.log(userCredential);
-        // userCredential object contains user id, email, displayName, other Firebase user properties 
-        const user = userCredential.user;
-        // clear error on successful login
-        setError("");
-        
-        // Just in case, may not need auth token 
-        user.getIdToken().then((token) => {
-        console.log("Token:", token)});
+        console.log(auth.currentUser) // debug
+        router.replace("/profile");
       })
       .catch((err) => {
-        console.log("Error signing in:", err);
+        console.log(err);
       });
   };
+
+  useEffect(()=>{console.log(auth)}, [auth])
 
   // Sign out method
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
         console.log("User signed out successfully");
+        console.log(auth.currentUser) // debug
       })
       .catch((err) => {
-        console.log("Error signing out:", err);
+        console.log(err);
       });
   };
 
