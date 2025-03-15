@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+//import { getAuth } from "firebase/auth";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -12,6 +13,9 @@ export default function TabLayout() {
   return (
     <Tabs>
       <Tabs.Screen
+        // condition to check auth user
+        // if user is signed in then grant access.
+
         name="map"
         options={{
           title: "Map",
