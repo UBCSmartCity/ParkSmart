@@ -1,10 +1,11 @@
 import { useRouter } from "expo-router";
 import { registerRootComponent } from "expo";
 import { useEffect, useState } from "react";
-import { Button, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Button, Text, StyleSheet, TouchableOpacity } from "react-native";
 import MapView, { Callout } from "react-native-maps";
 import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function map() {
   const router = useRouter();
@@ -44,6 +45,17 @@ export default function map() {
   ]);
 
   useEffect(() => {
+    const checkAuth = async () => {
+      const userToken = await AsyncStorage.getItem("userToken");
+      if (!userToken) {
+        router.replace("/login");
+      }
+    };
+
+    checkAuth();
+
+    
+    
     const getLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -70,31 +82,31 @@ export default function map() {
   }, []);
 
   return (
-    <MapView
-      style={styles.map}
-      initialRegion={initialRegion}
-      showsUserLocation={true}
-      showsMyLocationButton={true}
-      followsUserLocation={false}
-      showsCompass={true}
-      scrollEnabled={true}
-      zoomEnabled={true}
-      pitchEnabled={true}
-      rotateEnabled={true}
-    >
-      {position.map((pos, idx) => {
-        return (
+    <View style={{ flex: 1 }}>
+      <MapView
+        style={styles.map}
+        initialRegion={initialRegion}
+        showsUserLocation={true}
+        showsMyLocationButton={true}
+        followsUserLocation={false}
+        showsCompass={true}
+        scrollEnabled={true}
+        zoomEnabled={true}
+        pitchEnabled={true}
+        rotateEnabled={true}
+      >
+        {position?.map((pos, idx) => (
           <Marker key={idx} coordinate={pos.position}>
             <Callout onPress={() => router.push({ pathname: "/garage", params: { name: pos.title, grid: pos.grid } })}>
               <Text style={styles.calloutTitle}>{pos.title}</Text>
-              <TouchableOpacity>
-                <Button title="View Availablities" />
+              <TouchableOpacity activeOpacity={0.7} onPress={() => console.log("Button Pressed")}>
+                <Text style={{ color: "blue", textDecorationLine: "underline" }}>View Availabilities</Text>
               </TouchableOpacity>
             </Callout>
           </Marker>
-        );
-      })}
-    </MapView>
+        ))}
+      </MapView>
+    </View>
   );
 }
 
