@@ -1,10 +1,12 @@
 // ParkadeLayout.tsx
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 import Dropdown from "../components/dropdown";
 import ParkingGrid from "../components/parkingGrid";
 
 const ParkadeLayout = () => {
+  const { name, grid } = useLocalSearchParams();
   const [selectedFloor, setSelectedFloor] = useState("1"); // Default to floor 1
 
   return (
@@ -14,7 +16,7 @@ const ParkadeLayout = () => {
           <Text
             style={[styles.topLeftText, styles.flexHalf, styles.enhancedHeight]}
           >
-            UBC Thunderbird Parkade
+            {name || "UBC Parkade"}
           </Text>
         </View>
         <View style={[styles.flexHalf, styles.enhancedHeight]}>
@@ -30,7 +32,7 @@ const ParkadeLayout = () => {
         <View style={styles.entryExitLine} />
       </View>
       <View>
-        <ParkingGrid floor={selectedFloor} />
+        <ParkingGrid floor={selectedFloor} parkade={grid} />
       </View>
       <View style={[styles.footer, styles.flexShrink]}>
         <View style={styles.entryExitLine} />

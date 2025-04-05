@@ -6,12 +6,20 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //new installation
 import { Avatar, Text, Title, Caption } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 const profile = () => {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("userToken");
+    router.replace("/login");
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
@@ -122,6 +130,14 @@ const profile = () => {
             </View>
           </TouchableOpacity>
         </Link>
+      
+        <TouchableOpacity onPress={handleLogout}>
+          <View style={styles.menuItem}>
+           <Icon name="exit-to-app" color="#FF6347" size={25} />
+           <Text style={styles.menuItemText}>Logout</Text>
+          </View>
+        </TouchableOpacity>
+
       </View>
     </SafeAreaView>
   );

@@ -44,6 +44,7 @@ const parkingSpotToComponent = (parkingSpot: ParkingSpot) => {
 }
 
 const initialParkingSpots = {
+
   "1": [
     // Left side
     { id: "A-01", occupied: true,  type: "disabled" },
@@ -76,32 +77,37 @@ const initialParkingSpots = {
     { id: "A-11", occupied: false,  type: "car" },
     { id: "A-12", occupied: false,  type: "car" },
   ],
+
 };
 
 // Mapping of topic numbers to parking spot IDs for each floor
 const topicToSpotMap = {
-  "1": { "1": "A-02", "2": "A-09", "3": "A-06" },
-  "2": { "4": "A-01", "5": "A-09", "6": "A-06", "7": "A-12" },
+  thunderbird: { "1": "T-01", "2": "T-03" },
+  north: { "3": "N-01", "4": "N-02" },
+  west: { "5": "W-01", "6": "W-03" },
 };
+
 
 const ParkingGrid = ({ floor }: {floor: number}) => {
   const [spots, setSpots] = useState(initialParkingSpots[floor]);
 
 
 
+
   useEffect(() => {
-    setSpots(initialParkingSpots[floor]);
+    setSpots(
+      (initialParkingSpots[parkade] && initialParkingSpots[parkade][floor]) || []);
     const client = new Paho.Client(
       "a379239388c5400b8bd9d9d9f56f51ca.s2.eu.hivemq.cloud",
       8884,
       "/mqtt",
-      `mqtt-floors-${Math.random() * 1000}`
+      `mqtt-${parkade}-${Math.random() * 1000}`
     );
 
     const onMessage = (message) => {
       const topicNumber = message.destinationName.replace("test/topic", "");
       const occupied = parseInt(message.payloadString); // 1 for occupied, 0 for available
-      const spotId = topicToSpotMap[floor][topicNumber];
+      const spotId = topicToSpotMap[parkade]?.[topicNumber];
 
       console.log(
         `Received topic: ${topicNumber}, Occupied: ${occupied}, Spot ID: ${spotId}`
@@ -127,7 +133,7 @@ const ParkingGrid = ({ floor }: {floor: number}) => {
     client.connect({
       onSuccess: () => {
         console.log("Connected to MQTT");
-        Object.keys(topicToSpotMap[floor]).forEach((topicNumber) => {
+        Object.keys(topicToSpotMap[parkade] || {}).forEach((topicNumber) => {
           client.subscribe(`test/topic${topicNumber}`);
         });
       },
@@ -141,7 +147,11 @@ const ParkingGrid = ({ floor }: {floor: number}) => {
         client.disconnect();
       }
     };
-  }, [floor]);
+  }, [floor, parkade]);
+  
+  if (!spots || spots.length === 0) {
+    return <Text>No parking spots available for this floor.</Text>;
+  }
 
   const renderParkingSpots = (spots: ParkingSpot[], side: string) => {
     return spots.map((spot, index) => (
