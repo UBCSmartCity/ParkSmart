@@ -2,257 +2,82 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Paho from "paho-mqtt";
-import carIcon from "../assets/icons/car.png";
 import disabilityIcon from "../assets/icons/disability.png";
 import disabilityRedIcon from "../assets/icons/disability_red.png";
 
+import {MaterialIcons} from '@expo/vector-icons'
+
+interface ParkingSpot {
+  id: string,
+  occupied: boolean,
+  type: string // spot types: ev, reserved, bike, disabled, car
+}
+
+const parkingSpotToComponent = (parkingSpot: ParkingSpot) => {    
+    if (parkingSpot.type === "disabled") {
+      return ((!parkingSpot.occupied) ? <Image
+        source={disabilityIcon}
+        style={styles.disabledSpot}
+        resizeMode="contain"
+      /> : <Image
+        source={disabilityRedIcon}
+        style={styles.occupiedDisabledSpot}
+        resizeMode="contain"
+      />)               
+    }
+
+    if (parkingSpot.type === "bike") {
+      return <MaterialIcons size={25} name="pedal-bike" color={(!parkingSpot.occupied) ? "green" : "red"}/>
+    }
+
+    if (parkingSpot.type === "reserved") {
+      return <MaterialIcons size={25} name="block"/>
+    }
+
+    if (parkingSpot.type === "ev") {
+      return <MaterialIcons size={25} name="electric-car" color={(!parkingSpot.occupied) ? "green" : "red"}/>
+    }
+
+    if (parkingSpot.type === "car") {
+      return <MaterialIcons size={25} name="directions-car" color={(!parkingSpot.occupied) ? "green" : "red"}/>
+    }    
+}
+
 const initialParkingSpots = {
-  thunderbird: {
-    "1": [
-      // Left side
-      { id: "T-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "T-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-12", occupied: 0, isDisable: false, type: "car" },
-    ],
-    "2": [
-      // Left side
-      { id: "T-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "T-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-12", occupied: 0, isDisable: false, type: "car" },
-    ],
-    "3": [
-      // Left side
-      { id: "T-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "T-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-12", occupied: 0, isDisable: false, type: "car" },
-    ],
-    "4": [
-      // Left side
-      { id: "T-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "T-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-12", occupied: 0, isDisable: false, type: "car" },
-    ],
-    "5": [
-      // Left side
-      { id: "T-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "T-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-13", occupied: 0, isDisable: false, type: "car" },
-    ],
-  },
-  north: {
-    "1": [
-      // Left side
-      { id: "N-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "N-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-12", occupied: 0, isDisable: false, type: "car" },
-    ],
-    "2": [
-      // Left side
-      { id: "N-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "N-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-12", occupied: 0, isDisable: false, type: "car" },
-    ],
-    "3": [
-      // Left side
-      { id: "N-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "N-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-12", occupied: 0, isDisable: false, type: "car" },
-    ],
-    "4": [
-      // Left side
-      { id: "N-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "N-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "N-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "N-12", occupied: 0, isDisable: false, type: "car" },
-    ],
-    "5": [
-      // Left side
-      { id: "T-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "T-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "T-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "T-13", occupied: 0, isDisable: false, type: "car" },
-    ],
-  },
-  west: {
-    "1": [
-      // Left side
-      { id: "W-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "W-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-12", occupied: 0, isDisable: false, type: "car" },
-    ],
-    "2": [
-      // Left side
-      { id: "W-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "W-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-12", occupied: 0, isDisable: false, type: "car" },
-    ],
-    "3": [
-      // Left side
-      { id: "W-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "W-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-12", occupied: 0, isDisable: false, type: "car" },
-    ],
-    "4": [
-      // Left side
-      { id: "W-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "W-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-12", occupied: 0, isDisable: false, type: "car" },
-    ],
-    "5": [
-      // Left side
-      { id: "W-01", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-02", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-03", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-04", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-05", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-06", occupied: 0, isDisable: false, type: "car" },
-      // Right side, after left side spots
-      { id: "W-07", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-08", occupied: 0, isDisable: true, type: "car" },
-      { id: "W-09", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-10", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-11", occupied: 0, isDisable: false, type: "car" },
-      { id: "W-13", occupied: 0, isDisable: false, type: "car" },
-    ],
-  }
+
+  "1": [
+    // Left side
+    { id: "A-01", occupied: true,  type: "disabled" },
+    { id: "A-02", occupied: true,  type: "ev" },
+    { id: "A-03", occupied: true,  type: "car" },
+    { id: "A-04", occupied: true,  type: "reserved" },
+    { id: "A-05", occupied: true,  type: "bike" },
+    { id: "A-06", occupied: false,  type: "car" },
+    // Right side, after left side spots
+    { id: "A-07", occupied: false,  type: "car" },
+    { id: "A-08", occupied: false,  type: "car" },
+    { id: "A-09", occupied: false,  type: "car" },
+    { id: "A-10", occupied: false,  type: "car" },
+    { id: "A-11", occupied: false,  type: "car" },
+    { id: "A-12", occupied: false,  type: "car" },
+  ],
+  "2": [
+    // Left side
+    { id: "A-01", occupied: false,  type: "car" },
+    { id: "A-02", occupied: false,  type: "car" },
+    { id: "A-03", occupied: false,  type: "car" },
+    { id: "A-04", occupied: false,  type: "car" },
+    { id: "A-05", occupied: false,  type: "car" },
+    { id: "A-06", occupied: false,  type: "car" },
+    // Right side, after left side spots
+    { id: "A-07", occupied: false,  type: "car" },
+    { id: "A-08", occupied: false,  type: "car" },
+    { id: "A-09", occupied: false,  type: "car" },
+    { id: "A-10", occupied: false,  type: "car" },
+    { id: "A-11", occupied: false,  type: "car" },
+    { id: "A-12", occupied: false,  type: "car" },
+  ],
+
 };
 
 // Mapping of topic numbers to parking spot IDs for each floor
@@ -262,9 +87,12 @@ const topicToSpotMap = {
   west: { "5": "W-01", "6": "W-03" },
 };
 
-const ParkingGrid = ({ floor, parkade })  => {
-  const [spots, setSpots] = useState(
-    (initialParkingSpots[parkade] && initialParkingSpots[parkade][floor]) || [] );
+
+const ParkingGrid = ({ floor }: {floor: number}) => {
+  const [spots, setSpots] = useState(initialParkingSpots[floor]);
+
+
+
 
   useEffect(() => {
     setSpots(
@@ -286,7 +114,7 @@ const ParkingGrid = ({ floor, parkade })  => {
       );
 
       if (spotId) {
-        setSpots((prevSpots) =>
+        setSpots((prevSpots: ParkingSpot[]) =>
           prevSpots.map((spot) =>
             spot.id === spotId ? { ...spot, occupied: occupied } : spot
           )
@@ -294,7 +122,7 @@ const ParkingGrid = ({ floor, parkade })  => {
       }
     };
 
-    client.onConnectionLost = (responseObject) => {
+    client.onConnectionLost = (responseObject: any) => {
       if (responseObject.errorCode !== 0) {
         console.log("onConnectionLost:", responseObject.errorMessage);
       }
@@ -312,7 +140,7 @@ const ParkingGrid = ({ floor, parkade })  => {
       useSSL: true,
       userName: "smartcity",
       password: "SmartCity2024",
-    });
+    });    
 
     return () => {
       if (client.isConnected()) {
@@ -325,38 +153,23 @@ const ParkingGrid = ({ floor, parkade })  => {
     return <Text>No parking spots available for this floor.</Text>;
   }
 
-  const renderParkingSpots = (spots, side) => {
+  const renderParkingSpots = (spots: ParkingSpot[], side: string) => {
     return spots.map((spot, index) => (
-      <View style={styles.parkingSpot} key={`spot-${side}-${index}`}>
-        {spot.isDisable && spot.occupied === 1 ? (
-          // If the spot is disabled and occupied, show a specific image
-          <Image
-            source={disabilityRedIcon}
-            style={styles.occupiedDisabledSpot}
-            resizeMode="contain"
-          />
-        ) : spot.isDisable ? (
-          // If the spot is only disabled, show the disability image
-          <Image
-            source={disabilityIcon}
-            style={styles.disabledSpot}
-            resizeMode="contain"
-          />
-        ) : spot.occupied === 1 ? (
-          // If the spot is occupied but not disabled, show the car image
-          <Image
-            source={carIcon}
-            style={styles.occupiedSpot}
-            resizeMode="contain"
-          />
-        ) : (
-          // If the spot is neither occupied nor disabled, show the spot number
-          <Text style={styles.spotNumber}>{spot.id}</Text>
-        )}
+      <View style={styles.parkingSpot} key={`spot-${side}-${index}`}>        
+        {parkingSpotToComponent(spot)}
+        <Text style={styles.spotNumber}>{spot.id}</Text>                                          
       </View>
     ));
   };
 
+  const updateParkingSpotType = (lot: string, spotId: string, occupied: boolean, newType: string) => {
+    setSpots((prevSpots) => ({
+      ...prevSpots,
+      [lot]: prevSpots[lot].map((spot) =>
+        spot.id === spotId ? { ...spot, occupied: occupied, type: newType } : spot
+      ),
+    }));
+  };
   const floorData = spots;
   const splitIndex = Math.ceil(floorData.length / 2);
   const leftSideSpots = floorData.slice(0, splitIndex);
@@ -371,7 +184,7 @@ const ParkingGrid = ({ floor, parkade })  => {
         <Icon name="arrow-downward" size={30} color="#000" />
       </View>
       <View style={styles.column}>
-        {renderParkingSpots(rightSideSpots, "right")}
+        {renderParkingSpots(rightSideSpots, "right")}        
       </View>
     </View>
   );
@@ -406,16 +219,16 @@ const styles = StyleSheet.create({
     height: "80%",
   },
   occupiedDisabledSpot: {
-    width: "80%",
-    height: "80%",
+    width: "42%",
+    height: "42%",
   },
   spotNumber: {
     fontSize: 16,
     fontWeight: "bold",
   },
   disabledSpot: {
-    width: "60%",
-    height: "60%",
+    width: "42%",
+    height: "42%",
   },
 });
 
