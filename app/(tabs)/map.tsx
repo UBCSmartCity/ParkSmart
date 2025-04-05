@@ -49,6 +49,17 @@ export default function MapScreen() {
   ]);
 
   useEffect(() => {
+    const checkAuth = async () => {
+      const userToken = await AsyncStorage.getItem("userToken");
+      if (!userToken) {
+        router.replace("/login");
+      }
+    };
+
+    checkAuth();
+
+    
+    
     const getLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
