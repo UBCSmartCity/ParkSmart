@@ -1,46 +1,84 @@
 import { useRouter } from "expo-router";
 import { registerRootComponent } from "expo";
 import { useEffect, useState } from "react";
-import { Button, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import MapView, { Callout } from "react-native-maps";
 import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function map() {
+// define a type for the position object
+interface Position {
+  latitude: number;
+  longitude: number;
+  latitudeDelta: number;
+  longitudeDelta: number;
+}
+
+interface Gargae {
+  position: Position;
+  title: string;
+  grid: string;
+}
+
+const positions: Gargae[] = [
+  {
+    position: {
+      latitude: 49.26177,
+      longitude: -123.24318,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
+    },
+    title: "Thunderbird Parkade",
+    grid: "thunderbird",
+  },
+  {
+    position: {
+      latitude: 49.26913588171714,
+      longitude: -123.25094801537071,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
+    },
+    title: "North Parkade",
+    grid: "north",
+  },
+  {
+    position: {
+      latitude: 49.26264468076022,
+      longitude: -123.25547069764835,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
+    },
+    title: "West Parkade",
+    grid: "west",
+  },
+];
+
+export default function Map() {
   const router = useRouter();
-  const [initialRegion, setInitialRegion] = useState();
-  const [currentLocation, setCurrentLocation] = useState();
-  const [position, setPosition] = useState([
-    {
-      position: {
-        latitude: 49.26177,
-        longitude: -123.24318,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      },
-      title: "Thunderbird Parkade",
-    },
-    {
-      position: {
-        latitude: 49.26913588171714,
-        longitude: -123.25094801537071,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      },
-      title: "North Parkade",
-    },
-    {
-      position: {
-        latitude: 49.26264468076022,
-        longitude: -123.25547069764835,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      },
-      title: "West Parkade",
-    },
-  ]);
+  const [initialRegion, setInitialRegion] = useState<Position>();
+  // const [currentLocation, setCurrentLocation] = useState();
+  const [position, setPosition] = useState<Gargae[]>();
+
+  // Fetch positions from the server or use the static data
+  // TODO: Fetch positions from the server
+  useEffect(() => {
+    const getPositions = async () => {
+      setPosition(positions);
+    };
+    getPositions();
+  }, []);
 
   useEffect(() => {
+    const checkAuth = async () => {
+      const userToken = await AsyncStorage.getItem("userToken");
+      if (!userToken) {
+        router.replace("/login");
+      }
+    };
+
+    checkAuth();
+
     const getLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -53,7 +91,7 @@ export default function map() {
         console.log("Location not found");
         return;
       }
-      setCurrentLocation(location.coords);
+      // setCurrentLocation(location.coords);
 
       setInitialRegion({
         latitude: location.coords.latitude,
@@ -64,34 +102,48 @@ export default function map() {
     };
 
     getLocation();
-  }, []);
+  }, [router]);
 
   return (
-    <MapView
-      style={styles.map}
-      initialRegion={initialRegion}
-      showsUserLocation={true}
-      showsMyLocationButton={true}
-      followsUserLocation={false}
-      showsCompass={true}
-      scrollEnabled={true}
-      zoomEnabled={true}
-      pitchEnabled={true}
-      rotateEnabled={true}
-    >
-      {position.map((pos, idx) => {
-        return (
+    <View style={{ flex: 1 }}>
+      <MapView
+        style={styles.map}
+        initialRegion={initialRegion}
+        showsUserLocation={true}
+        showsMyLocationButton={true}
+        followsUserLocation={false}
+        showsCompass={true}
+        scrollEnabled={true}
+        zoomEnabled={true}
+        pitchEnabled={true}
+        rotateEnabled={true}
+      >
+        {position?.map((pos, idx) => (
           <Marker key={idx} coordinate={pos.position}>
-            <Callout onPress={() => router.push("/garage")}>
+            <Callout
+              onPress={() =>
+                router.push({
+                  pathname: "/garage",
+                  params: { name: pos.title, grid: pos.grid },
+                })
+              }
+            >
               <Text style={styles.calloutTitle}>{pos.title}</Text>
-              <TouchableOpacity>
-                <Button title="View Availablities" />
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => console.log("Button Pressed")}
+              >
+                <Text
+                  style={{ color: "blue", textDecorationLine: "underline" }}
+                >
+                  View Availabilities
+                </Text>
               </TouchableOpacity>
             </Callout>
           </Marker>
-        );
-      })}
-    </MapView>
+        ))}
+      </MapView>
+    </View>
   );
 }
 
@@ -110,4 +162,4 @@ const styles = StyleSheet.create({
   },
 });
 
-registerRootComponent(map);
+registerRootComponent(Map);

@@ -6,34 +6,29 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Image,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
-import { FontAwesome } from "@expo/vector-icons"; // For social icons
+import { FontAwesome } from "@expo/vector-icons";
 
-export default function Login() {
+export default function SignUp() {
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const onPressLogin = async () => {
-    if (email === "user@example.com" && password === "password") {
-      await AsyncStorage.setItem("userToken", "valid_token"); // Store login token
-      router.replace("/map"); // Redirect to map screen
-    } else {
-      alert("Invalid email or password.");
-    }
+  const onPressSignUp = async () => {
+    // Placeholder for Firebase signup logic
+    alert("Sign up logic to be added here");    
   };
 
   return (
     <LinearGradient colors={["#F8F9FD", "#fff"]} style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Sign Up</Text>
 
-      {/* Email Input */}
       <TextInput
         style={styles.input}
-        placeholder="Email or Username"
+        placeholder="Email"
         placeholderTextColor="#A0A0A0"
         value={email}
         onChangeText={setEmail}
@@ -41,7 +36,14 @@ export default function Login() {
         autoCapitalize="none"
       />
 
-      {/* Password Input */}
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        placeholderTextColor="#A0A0A0"
+        value={username}
+        onChangeText={setUsername}
+      />
+
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -51,20 +53,21 @@ export default function Login() {
         secureTextEntry
       />
 
-      {/* Forgot Password */}
-      <TouchableOpacity>
-        <Text style={styles.forgotPassword}>Forgot Password?</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Retype - Password"
+        placeholderTextColor="#A0A0A0"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+      />
+
+      <TouchableOpacity onPress={onPressSignUp} style={styles.loginBtn}>
+        <Text style={styles.loginText}>Sign Up</Text>
       </TouchableOpacity>
 
-      {/* Login Button */}
-      <TouchableOpacity onPress={onPressLogin} style={styles.loginBtn}>
-        <Text style={styles.loginText}>Sign in</Text>
-      </TouchableOpacity>
+      <Text style={styles.orText}>─── Or Sign up with ───</Text>
 
-      {/* OR Divider */}
-      <Text style={styles.orText}>─── Or Sign in with ───</Text>
-
-      {/* Social Login Buttons */}
       <TouchableOpacity style={styles.socialButton}>
         <FontAwesome name="apple" size={20} color="black" />
         <Text style={styles.socialText}>Sign in with Apple</Text>
@@ -80,11 +83,13 @@ export default function Login() {
         <Text style={styles.socialText}>Sign in with Facebook</Text>
       </TouchableOpacity>
 
-      {/* Sign Up Link */}
       <Text style={styles.signupText}>
-        Don't have an account?{" "}
-        <Text style={styles.signupLink} onPress={() => router.replace("/signup")}>
-          Sign up
+        Already have account?{' '}
+        <Text
+          style={styles.signupLink}
+          onPress={() => router.replace("/login")}
+        >
+          Sign In
         </Text>
       </Text>
     </LinearGradient>
@@ -116,13 +121,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     elevation: 3,
-  },
-  forgotPassword: {
-    alignSelf: "flex-end",
-    marginRight: "10%",
-    color: "#5A27BE",
-    fontSize: 14,
-    marginBottom: 20,
   },
   loginBtn: {
     width: "90%",
